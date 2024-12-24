@@ -1,3 +1,4 @@
+import os
 import qrcode
 from tkinter import *
 from tkinter import messagebox
@@ -8,6 +9,19 @@ win.title('QR Code Generator')
 win.geometry('650x650')
 win.config(bg='DarkTurquoise')
 
+# Create a folder in the current working directory to save new QR Code
+DESTINATION_FOLDER = 'code_generated'
+LOC_SAVE = os.path.join(os.getcwd(), DESTINATION_FOLDER)
+
+# If not already created, create the "save" folder
+if not os.path.exists(LOC_SAVE):
+    os.makedirs(LOC_SAVE)
+    print(f"I've created the folder '{DESTINATION_FOLDER}'")
+
+else:
+    print(f"The folder '{DESTINATION_FOLDER}' already exists.")
+
+
 #Function to generate the QR code and save it
 def generateCode():
     #Creating a QRCode object of the size specified by the user
@@ -15,8 +29,7 @@ def generateCode():
     qr.add_data(text.get()) #Adding the data to be encoded to the QRCode object
     qr.make(fit = True) #Making the entire QR Code space utilized
     img = qr.make_image() #Generating the QR Code
-    fileDir=loc.get()+'\\'+name.get() #Getting the directory where the file has to be save
-    img.save(f'{fileDir}.png') #Saving the QR Code
+    img.save(f'{LOC_SAVE}\{name.get()}.png') #Saving the QR Code
     #Showing the pop up message on saving the file
     messagebox.showinfo("QR Code Generator","QR Code is saved successfully!")
     
@@ -43,7 +56,7 @@ Frame2.place(relx=0.1,rely=0.35,relwidth=0.7,relheight=0.3)
 label2 = Label(Frame2,text="Enter the location to save the QR Code: ",bg="DarkTurquoise",fg='azure',font=('FiraMono',13,'bold'))
 label2.place(relx=0.05,rely=0.2, relheight=0.08)
 
-loc = Entry(Frame2,font=('Century 12'))
+loc = Label(Frame2,font=('Century 12'), text=f"{LOC_SAVE}")
 loc.place(relx=0.05,rely=0.4, relwidth=1, relheight=0.2)
 
 #Getting input of the QR Code image name 
